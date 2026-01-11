@@ -1,13 +1,13 @@
-package com.lldproject.ecommercewebsite;
+package com.lldproject.productcatalogservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ECommerceWebsiteApplication {
+public class ProductCatalogService {
 
     public static void main(String[] args) {
-        SpringApplication.run(ECommerceWebsiteApplication.class, args);
+        SpringApplication.run(ProductCatalogService.class, args);
     }
 
 }

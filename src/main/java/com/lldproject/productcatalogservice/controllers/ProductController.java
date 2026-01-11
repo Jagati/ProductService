@@ -1,11 +1,11 @@
-package com.lldproject.ecommercewebsite.controllers;
+package com.lldproject.productcatalogservice.controllers;
 
-import com.lldproject.ecommercewebsite.dtos.CategoryDto;
-import com.lldproject.ecommercewebsite.dtos.ProductDto;
-import com.lldproject.ecommercewebsite.exceptions.ProductNotFoundException;
-import com.lldproject.ecommercewebsite.models.Category;
-import com.lldproject.ecommercewebsite.models.Product;
-import com.lldproject.ecommercewebsite.services.IProductService;
+import com.lldproject.productcatalogservice.dtos.CategoryDto;
+import com.lldproject.productcatalogservice.dtos.ProductDto;
+import com.lldproject.productcatalogservice.exceptions.ProductNotFoundException;
+import com.lldproject.productcatalogservice.models.Category;
+import com.lldproject.productcatalogservice.models.Product;
+import com.lldproject.productcatalogservice.services.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
-package com.lldproject.ecommercewebsite.controllers;
+package com.lldproject.productcatalogservice.controllers;
 
-import com.lldproject.ecommercewebsite.exceptions.ProductNotFoundException;
+import com.lldproject.productcatalogservice.exceptions.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

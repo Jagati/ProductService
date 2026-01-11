@@ -1,6 +1,6 @@
-package com.lldproject.ecommercewebsite.services;
+package com.lldproject.productcatalogservice.services;
 
-import com.lldproject.ecommercewebsite.models.Product;
+import com.lldproject.productcatalogservice.models.Product;
 
 import java.util.List;
 

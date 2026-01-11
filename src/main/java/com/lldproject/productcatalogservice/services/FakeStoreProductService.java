@@ -1,21 +1,11 @@
-package com.lldproject.ecommercewebsite.services;
+package com.lldproject.productcatalogservice.services;
 
-import com.lldproject.ecommercewebsite.clients.FakeStoreApiClient;
-import com.lldproject.ecommercewebsite.dtos.FakeStoreProductDto;
-import com.lldproject.ecommercewebsite.dtos.ProductDto;
-import com.lldproject.ecommercewebsite.models.Category;
-import com.lldproject.ecommercewebsite.models.Product;
+import com.lldproject.productcatalogservice.clients.FakeStoreApiClient;
+import com.lldproject.productcatalogservice.dtos.FakeStoreProductDto;
+import com.lldproject.productcatalogservice.models.Category;
+import com.lldproject.productcatalogservice.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RequestCallback;
-import org.springframework.web.client.ResponseExtractor;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;

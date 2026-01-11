@@ -1,11 +1,9 @@
-package com.lldproject.ecommercewebsite.clients;
+package com.lldproject.productcatalogservice.clients;
 
-import com.lldproject.ecommercewebsite.dtos.FakeStoreProductDto;
-import com.lldproject.ecommercewebsite.models.Product;
+import com.lldproject.productcatalogservice.dtos.FakeStoreProductDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;

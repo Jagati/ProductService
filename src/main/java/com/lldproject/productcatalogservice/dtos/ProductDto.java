@@ -1,6 +1,5 @@
-package com.lldproject.ecommercewebsite.dtos;
+package com.lldproject.productcatalogservice.dtos;
 
-import com.lldproject.ecommercewebsite.models.Category;
 import lombok.Getter;
 import lombok.Setter;
 
