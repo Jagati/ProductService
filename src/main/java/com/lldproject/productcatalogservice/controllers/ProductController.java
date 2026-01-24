@@ -2,11 +2,13 @@ package com.lldproject.productcatalogservice.controllers;
 
 import com.lldproject.productcatalogservice.dtos.CategoryDto;
 import com.lldproject.productcatalogservice.dtos.ProductDto;
+import com.lldproject.productcatalogservice.exceptions.ProductAlreadyPresentException;
 import com.lldproject.productcatalogservice.exceptions.ProductNotFoundException;
 import com.lldproject.productcatalogservice.models.Category;
 import com.lldproject.productcatalogservice.models.Product;
 import com.lldproject.productcatalogservice.services.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,7 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
     @Autowired
+    @Qualifier("storageProductService") //We can also add annotation @Primary on the StorageProductService to make it the default product service
     private IProductService productService;
     @GetMapping
     public ResponseEntity<List<ProductDto>> getAllProducts() {
@@ -48,8 +51,13 @@ public class ProductController {
 
     @PostMapping
     public ProductDto createProduct(@RequestBody ProductDto productDto) {
-
-        return productDto;
+        Product product = productService.createProduct(from(productDto));
+        if(product!=null){
+            return from(product);
+        }
+        else{
+            throw new ProductAlreadyPresentException("Product already exists");
+        }
     }
 
     @PutMapping("/{id}")
