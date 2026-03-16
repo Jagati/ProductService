@@ -7,6 +7,7 @@ import com.lldproject.productcatalogservice.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -18,6 +19,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 @Service
 @Primary
 public class FakeStoreProductService implements IProductService{
@@ -25,15 +28,38 @@ public class FakeStoreProductService implements IProductService{
     private FakeStoreApiClient  fakeStoreApiClient;
     @Autowired
     private RestTemplateBuilder restTemplateBuilder;
+    @Autowired
+    private RedisTemplate<String,Object> redisTemplate;
 
 
     @Override
     public Product getProductById(Long id){
-        FakeStoreProductDto fakeStoreProductDto = fakeStoreApiClient.getProductById(id);
-        if(fakeStoreProductDto == null){
-            return null;
+        //        if found in redis
+        //                 return from redis
+        //        else
+        //            make call to fakestore
+        //            store in redis
+        //            return
+        FakeStoreProductDto fakeStoreProductDto = null;
+
+        fakeStoreProductDto =  (FakeStoreProductDto)
+                redisTemplate.opsForHash().get("PRODUCTS",id);
+
+        if(fakeStoreProductDto == null) {
+            fakeStoreProductDto = fakeStoreApiClient.getProductById(id);
+            redisTemplate.opsForHash().put("PRODUCTS",id,fakeStoreProductDto);
+            redisTemplate.expire("PRODUCTS", 5, TimeUnit.MINUTES);
+            System.out.println("Found by calling fakestore");
+        } else {
+            System.out.println("Found in redis cache");
         }
-        return from(fakeStoreProductDto);
+
+
+        if (fakeStoreProductDto != null) {
+            return from(fakeStoreProductDto);
+        }
+
+        return null;
     }
     @Override
     public List<Product> getAllProducts(){
