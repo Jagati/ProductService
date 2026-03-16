@@ -5,14 +5,27 @@ import com.lldproject.productcatalogservice.dtos.FakeStoreProductDto;
 import com.lldproject.productcatalogservice.models.Category;
 import com.lldproject.productcatalogservice.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RequestCallback;
+import org.springframework.web.client.ResponseExtractor;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 @Service
+@Primary
 public class FakeStoreProductService implements IProductService{
     @Autowired
     private FakeStoreApiClient  fakeStoreApiClient;
+    @Autowired
+    private RestTemplateBuilder restTemplateBuilder;
+
 
     @Override
     public Product getProductById(Long id){
@@ -51,13 +64,25 @@ public class FakeStoreProductService implements IProductService{
     }
 
     @Override
-    public Product deleteProduct(Long id){
+    public boolean deleteProduct(Long id){
         FakeStoreProductDto fakeStoreProductDto = fakeStoreApiClient.getProductById(id);
         FakeStoreProductDto fakeStoreProductDtoResponse = fakeStoreApiClient.deleteProduct(fakeStoreProductDto, id);
         if(fakeStoreProductDtoResponse != null){
-            return from(fakeStoreProductDtoResponse);
+            return true;
         }
+        return false;
+    }
+
+    @Override
+    public Product getProductBasedOnUserRole(Long productId, Long userId) {
         return null;
+    }
+
+    private <T> ResponseEntity<T> requestForEntity(HttpMethod httpMethod, String url, @Nullable Object request, Class<T> responseType, Object... uriVariables) throws RestClientException {
+        RestTemplate restTemplate  = restTemplateBuilder.build();
+        RequestCallback requestCallback = restTemplate.httpEntityCallback(request, responseType);
+        ResponseExtractor<ResponseEntity<T>> responseExtractor = restTemplate.responseEntityExtractor(responseType);
+        return restTemplate.execute(url, httpMethod, requestCallback, responseExtractor, uriVariables);
     }
 
     private FakeStoreProductDto from(Product product){

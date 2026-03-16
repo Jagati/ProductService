@@ -1,0 +1,31 @@
+FetchType        FetchMode          Result
+
+LAZY             SELECT             Asked For Products - Queries - 2 select
+                                    Not Asked For Products - Queries - 1 select
+
+
+EAGER            SELECT             Asked For Products - Queries - 2 select
+                                    Not Asked For Products - Queries - 2 select
+
+    In above cases, There is no divergence in FetchType Behavior.
+    We saw select queries instead of default Join Query.
+
+
+
+LAZY             JOIN               Asked For Products - Queries - 1 JOIN Query
+                                    Not Asked For Products - Queries - 1 JOIN Query (ditched fetchtype)
+
+
+
+EAGER            JOIN               Asked For Products - Queries - 1 JOIN Query
+                                    Not Asked For Products - Queries - 1 JOIN Query
+
+
+
+LAZY             SUBSELECT           Asked For Products - Queries - 2 select
+                                     Not Asked For Products - Queries - 1 select
+
+
+
+EAGER            SUBSELECT          Asked For Products - Queries - 2 select
+                                    Not Asked For Products - Queries - 2 select

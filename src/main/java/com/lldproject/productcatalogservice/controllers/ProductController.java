@@ -20,33 +20,57 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
     @Autowired
-    @Qualifier("storageProductService") //We can also add annotation @Primary on the StorageProductService to make it the default product service
+    //@Qualifier("storageProductService") //We can also add annotation @Primary on the StorageProductService to make it the default product service
     private IProductService productService;
+    //    @Autowired
+    //    @Qualifier("fakeStoreProductService")
+    //    private IProductService productService2;
+//    @GetMapping
+//    public ResponseEntity<List<ProductDto>> getAllProducts() {
+//        List<ProductDto> productDtos = new ArrayList<>();
+//        List<Product> products = productService.getAllProducts();
+//        if(products!=null){
+//           for( Product product:products){
+//               ProductDto productDto = from(product);
+//               productDtos.add(productDto);
+//           }
+//           return new ResponseEntity<>(productDtos, HttpStatus.OK);
+//       }
+//        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//    }
     @GetMapping
-    public ResponseEntity<List<ProductDto>> getAllProducts() {
+    List<ProductDto> getAllProducts() {
         List<ProductDto> productDtos = new ArrayList<>();
-        List<Product> products = productService.getAllProducts();
-        if(products!=null){
-           for( Product product:products){
-               ProductDto productDto = from(product);
-               productDtos.add(productDto);
-           }
-           return new ResponseEntity<>(productDtos, HttpStatus.OK);
-       }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        List<Product>products = productService.getAllProducts();
+        if (products != null) {
+            for(Product product : products) {
+                ProductDto productDto = from(product);
+                productDtos.add(productDto);
+            }
+            return productDtos;
+        }
+
+        return null;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
-        if(id<1){
+    public ResponseEntity<ProductDto> getProductById(@PathVariable("id") Long productId) {
+        if(productId<1){
             throw new IllegalArgumentException("ID should be greater than 0");
         }
-        Product product = productService.getProductById(id);
+        Product product = productService.getProductById(productId);
         if(product==null){
             throw new ProductNotFoundException("Product not found");
         }
         ProductDto productDto = from(product);
         return new ResponseEntity<>(productDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/{productId}/{userId}")
+    public ProductDto getProductDetailsBasedOnUserRole(@PathVariable Long productId,@PathVariable Long userId) {
+        Product product = productService.getProductBasedOnUserRole(productId, userId);
+        if(product == null) return null;
+        return from(product);
     }
 
     @PostMapping
@@ -74,15 +98,11 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ProductDto> deleteProduct(@PathVariable Long id) {
-        if(id<1){
-            throw new IllegalArgumentException("ID should be greater than 0");
+    void deleteProduct(@PathVariable Long id) {
+        boolean result = productService.deleteProduct(id);
+        if(!result) {
+            throw new ProductNotFoundException("product not available");
         }
-        Product product = productService.deleteProduct(id);
-        if(product!=null){
-            return new ResponseEntity<>(from(product), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     private Product from(ProductDto productDto){
